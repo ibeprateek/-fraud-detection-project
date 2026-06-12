@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
+from sklearn.cluster import DBSCAN
 
 # Load Model and Scaler
 model = pickle.load(open("fraud_model.pkl", "rb"))
@@ -125,6 +126,17 @@ if st.button("Check Fraud Risk"):
         scaled_data
     )[0][1]
 
+    # DBSCAN Anomaly Detection
+
+    dbscan = DBSCAN(
+        eps=0.5,
+        min_samples=1
+    )
+
+    dbscan_result = dbscan.fit_predict(
+        scaled_data
+    )
+
     risk_score = probability * 100
 
     # Display Metrics
@@ -155,6 +167,22 @@ if st.button("Check Fraud Risk"):
         risk_level = "LOW"
 
     st.write(f"### Risk Level: {risk_level}")
+
+    # DBSCAN Analysis
+
+    st.write("### DBSCAN Analysis")
+
+    if dbscan_result[0] == -1:
+
+        st.warning(
+            "⚠ Outlier Detected by DBSCAN"
+        )
+
+    else:
+
+        st.success(
+            "✅ Normal Transaction Pattern"
+        )
 
     # Fraud Detection Threshold
 

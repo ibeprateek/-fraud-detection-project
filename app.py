@@ -4,8 +4,8 @@ import pickle
 from sklearn.cluster import DBSCAN
 
 # Load Model and Scaler
-model = pickle.load(open("fraud_model.pkl", "rb"))
-scaler = pickle.load(open("scaler.pkl", "rb"))
+model = pickle.load(open("fraud_model (1).pkl", "rb"))
+scaler = pickle.load(open("scaler (1).pkl", "rb"))
 
 st.set_page_config(
     page_title="Digital Payment Fraud Detection",
@@ -81,7 +81,8 @@ if st.button("Check Fraud Risk"):
         'type_CASH_OUT': 0,
         'type_DEBIT': 0,
         'type_PAYMENT': 0,
-        'type_TRANSFER': 0
+        'type_TRANSFER': 0,
+        'DBSCAN_Outlier': 0
     }
 
     # One Hot Encoding
@@ -115,7 +116,8 @@ if st.button("Check Fraud Risk"):
         'type_CASH_OUT',
         'type_DEBIT',
         'type_PAYMENT',
-        'type_TRANSFER'
+        'type_TRANSFER',
+        'DBSCAN_Outlier'
     ]
 
     df = df[feature_order]
@@ -126,16 +128,6 @@ if st.button("Check Fraud Risk"):
         scaled_data
     )[0][1]
 
-    # DBSCAN Anomaly Detection
-
-    dbscan = DBSCAN(
-        eps=0.5,
-        min_samples=1
-    )
-
-    dbscan_result = dbscan.fit_predict(
-        scaled_data
-    )
 
     risk_score = probability * 100
 
@@ -167,22 +159,6 @@ if st.button("Check Fraud Risk"):
         risk_level = "LOW"
 
     st.write(f"### Risk Level: {risk_level}")
-
-    # DBSCAN Analysis
-
-    st.write("### DBSCAN Analysis")
-
-    if dbscan_result[0] == -1:
-
-        st.warning(
-            "⚠ Outlier Detected by DBSCAN"
-        )
-
-    else:
-
-        st.success(
-            "✅ Normal Transaction Pattern"
-        )
 
     # Fraud Detection Threshold
 

@@ -4,8 +4,8 @@ import pickle
 from sklearn.cluster import DBSCAN
 
 # Load Model and Scaler
-model = pickle.load(open("fraud_model (2).pkl", "rb"))
-scaler = pickle.load(open("scaler (2).pkl", "rb"))
+model = pickle.load(open("fraud_model.pkl", "rb"))
+scaler = pickle.load(open("scaler.pkl", "rb"))
 
 st.set_page_config(
     page_title="Digital Payment Fraud Detection",
